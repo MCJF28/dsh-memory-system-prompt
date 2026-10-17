@@ -1,0 +1,4 @@
+# dsh-memory —— bundle patch
+- insert:
+    - id: dsh-memory
+      name: dsh-memory

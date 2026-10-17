@@ -1,0 +1,45 @@
+{
+  "name": "dsh-memory",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "全局记忆：AI 主动写入与读取的记忆文件，每轮对话前自动注入索引，不占上下文，仅按需展开；支持本对话禁用。",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "memory",
+    "deepseek-harness"
+  ],
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE",
+    "system-prompt.js"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true
+    }
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MCJF28/dsh-memory.git"
+  },
+  "homepage": "https://github.com/MCJF28/dsh-memory",
+  "bugs": {
+    "url": "https://github.com/MCJF28/dsh-memory/issues"
+  },
+  "author": "MCJF28"
+}
