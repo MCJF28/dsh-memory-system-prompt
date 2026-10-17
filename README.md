@@ -51,13 +51,23 @@
 
 ## 安装
 
+**推荐用 DSH 内置插件安装程序。** 打开「设置 → 内置插件」，在安装输入框里粘贴下面这一串（就是 `pnpm add` 后面的地址），点安装，再重启应用：
+
+```
+github:MCJF28/dsh-memory-system-prompt
+```
+
+安装程序会自动把包写进 `dsh.profile.bundles`，不用手动改任何文件。
+
+习惯命令行的话：先完全退出应用，再在 profile 目录执行
+
 ```bash
+cd ~/.dsh/profiles/desktop
 pnpm add github:MCJF28/dsh-memory-system-prompt
 ```
 
-装完在 profile 的 `dsh.profile.bundles` 里加上 `dsh-memory-system-prompt`，然后重启应用。
+然后把包名加进 `dsh.profile.bundles`，重启应用。
 
-> 如果你之前装过独立的 `dsh-system-prompt`，先把它从 `dependencies` 和 `bundles` 里移除，否则两个包会各自注入一次系统提示词。
 
 ## 注意
 
@@ -118,13 +128,23 @@ Every dial defaults to "default"; keeping all of them default produces no extra 
 
 ## Install
 
+**The built-in plugin installer is the recommended way.** Open Settings → Built-in Plugins, paste the string below into the install box — it is exactly what follows `pnpm add` — then press install and restart the app:
+
+```
+github:MCJF28/dsh-memory-system-prompt
+```
+
+The installer writes the package into `dsh.profile.bundles` for you; no manual file edits.
+
+Prefer the command line? Quit the app completely first, then from the profile directory:
+
 ```bash
+cd ~/.dsh/profiles/desktop
 pnpm add github:MCJF28/dsh-memory-system-prompt
 ```
 
-Then add `dsh-memory-system-prompt` to `dsh.profile.bundles` in your profile and restart the app.
+Add the package name to `dsh.profile.bundles` yourself and restart the app.
 
-> If you previously installed the standalone `dsh-system-prompt`, remove it from both `dependencies` and `bundles` first — otherwise the system prompt is injected twice.
 
 ## Notes
 
