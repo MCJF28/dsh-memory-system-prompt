@@ -21,7 +21,8 @@
     "cordis.patch.yml",
     "README.md",
     "LICENSE",
-    "system-prompt.js"
+    "system-prompt.js",
+    "README.zh.md"
   ],
   "dsh": {
     "bundle": {
