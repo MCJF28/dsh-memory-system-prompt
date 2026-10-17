@@ -1,4 +1,4 @@
-# dsh-memory
+# dsh-memory-system-prompt
 
 全局记忆插件：AI 可以主动把事实写进记忆文件，并在后续对话里按需读取。记忆索引每轮自动注入系统提示，**不占用对话上下文**。
 
@@ -48,10 +48,10 @@
 ## 安装
 
 ```bash
-pnpm add github:MCJF28/dsh-memory
+pnpm add github:MCJF28/dsh-memory-system-prompt
 ```
 
-装完在 profile 的 `dsh.profile.bundles` 里加上 `dsh-memory`，然后重启应用。
+装完在 profile 的 `dsh.profile.bundles` 里加上 `dsh-memory-system-prompt`，然后重启应用。
 
 > 如果你之前装过独立的 `dsh-system-prompt`，先把它从 `dependencies` 和 `bundles` 里移除，否则两个包会各自注入一次系统提示词。
 

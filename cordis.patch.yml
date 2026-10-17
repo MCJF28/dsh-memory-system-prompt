@@ -1,4 +1,4 @@
-# dsh-memory —— bundle patch
+# dsh-memory-system-prompt —— bundle patch
 - insert:
-    - id: dsh-memory
-      name: dsh-memory
+    - id: dsh-memory-system-prompt
+      name: dsh-memory-system-prompt
