@@ -17,7 +17,7 @@ import { apply as applySystemPrompt } from './system-prompt.js'
 
 export const name = 'dsh-memory'
 
-export const inject = ['tools', 'webServer']
+export const inject = ['tools', 'webServer', 'commands']
 
 const DSH_HOME = process.env.DSH_HOME || join(homedir(), '.dsh')
 const MEMORY_DIR = join(DSH_HOME, 'memory')
@@ -224,6 +224,59 @@ async function refreshIndex(key) {
 export function apply(ctx) {
   // 系统提示词逻辑（原先独立的 dsh-system-prompt 包，现已并入本包）
   applySystemPrompt(ctx)
+
+  /**
+   * `/memory`：查看或切换本对话的记忆开关。
+   *
+   * 不带参数只报告状态；带参数在 on / manual / off 之间切换，
+   * 并在切换后立即重算索引 —— 否则下一步装配还会用旧文本。
+   * 全局关闭时拒绝切换：那样才符合「全局关就是真的关」的语义。
+   */
+  ctx.commands.register({
+    name: 'memory',
+    description: '查看或切换本对话的记忆开关',
+    handler: async (inv) => {
+      const sessionId = inv.agent?.session?.id
+      const key = sessionId === undefined ? undefined : String(sessionId)
+      const raw = inv.rawInput.trim().toLowerCase()
+
+      const labelOf = (value) => (value === ACCESS_OFF ? '关' : value === ACCESS_MANUAL ? '部分' : '开')
+
+      if (raw === '') {
+        const entries = await readAll()
+        const access = accessOf(key)
+        const lines = [
+          `全局记忆：${globalMemoryEnabled ? '开启' : '已关闭'}`,
+          `本对话：${labelOf(access)}`,
+          `已保存 ${entries.length} 条记忆`,
+        ]
+        if (!globalMemoryEnabled) {
+          lines.push('全局已关，单对话开关不生效。')
+        }
+        lines.push('用 /memory on | manual | off 切换本对话；其余在「设置 → 记忆与提示词」。')
+        return { kind: 'success', text: lines.join('\n') }
+      }
+
+      if (raw !== 'on' && raw !== 'auto' && raw !== 'manual' && raw !== 'off') {
+        return { kind: 'error', text: '用法：/memory [on|manual|off]，不带参数只查看状态。' }
+      }
+
+      if (!globalMemoryEnabled) {
+        return {
+          kind: 'error',
+          text: '记忆已在设置里全局关闭，单对话无法打开。请先到「设置 → 记忆与提示词」重新开启。',
+        }
+      }
+      if (key === undefined) {
+        return { kind: 'error', text: '取不到当前会话，无法切换。' }
+      }
+
+      const next = raw === 'off' ? ACCESS_OFF : raw === 'manual' ? ACCESS_MANUAL : ACCESS_AUTO
+      accessBySession.set(key, next)
+      void refreshIndex(key)
+      return { kind: 'success', text: `本对话的记忆已切换为「${labelOf(next)}」。` }
+    },
+  })
 
   /* ---------------- AI 工具 ---------------- */
 
