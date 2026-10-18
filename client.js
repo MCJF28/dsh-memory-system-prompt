@@ -10,8 +10,19 @@
  * 一律使用宿主的 --dsw-radius-* / --dsw-alias-* 变量，不自造颜色。
  */
 
-window.__ModuleLoader__.load({
-  id: 'dsh-memory',
+/*
+ * 防重复执行。
+ *
+ * 客户端模块加载器按包名解析 factory。实测该 bundle 可能被执行两次
+ * （crash 日志：duplicate factory registration for "dsh-memory",
+ *  bundle executed twice without invalidate），第二次 load 会直接抛
+ * 未捕获错误，导致本模块注册失败、web boot 报 import failed。
+ * 用一个全局标记让第二次静默跳过。
+ */
+if (!window.__dshMemorySystemPromptRegistered) {
+  window.__dshMemorySystemPromptRegistered = true
+  window.__ModuleLoader__.load({
+  id: 'dsh-memory-system-prompt',
   factory(require) {
     const React = require('react')
     const h = React.createElement
@@ -1302,3 +1313,4 @@ button[data-${NAV_ATTR}="${NAV_VALUE}"]::before{
     }
   },
 })
+}
